@@ -55,9 +55,9 @@ pesticide_data = pd.read_excel("../data/data_final.xlsx",sheet_name="pesticide")
 PPCPs_data = pd.read_excel("../data/data_final.xlsx",sheet_name="PPCPs")
 other_data = pd.read_excel("../data/data_final.xlsx",sheet_name="other")
 
-x_pesticide_data = pesticide_data.loc[:,["log RCF","flipid"]].to_numpy().reshape(-1,2)
-x_PPCPs_data=PPCPs_data.loc[:,["log RCF","flipid"]].to_numpy().reshape(-1,2)
-x_other_data=other_data.loc[:,["log RCF","flipid"]].to_numpy().reshape(-1,2)
+x_pesticide_data = pesticide_data.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]].to_numpy().reshape(-1,5)
+x_PPCPs_data=PPCPs_data.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]].to_numpy().reshape(-1,5)
+x_other_data=other_data.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]].to_numpy().reshape(-1,5)
 
 SMILES_pesticide=pesticide_data.loc[:,"SMILES"]
 SMILES_PPCPs=PPCPs_data.loc[:,"SMILES"]
@@ -75,8 +75,8 @@ inputDataX_for_importance=np.concatenate((x_pesticide_data,x_PPCPs_data,x_other_
 inputDataX_scaler = np.concatenate((inputDataX_for_importance,FP),1)
 # inputDataX_scaler=scipy.stats.mstats.zscore(inputDataX_for_importance)
 scaler = MinMaxScaler()
-inputDataX_scaler = scaler.fit_transform(inputDataX_scaler)
-inputDataX_scaler[np.isnan(inputDataX_scaler)]=0
+# inputDataX_scaler = scaler.fit_transform(inputDataX_scaler)
+# inputDataX_scaler[np.isnan(inputDataX_scaler)]=0
 outputDatay=np.concatenate((pesticide_data.loc[:,"log TF"],PPCPs_data.loc[:,"log TF"],other_data.loc[:,"log TF"]),0).reshape(-1,1)
 immature_data = inputDataX_scaler[:3]
 immature_TF = outputDatay[:3]
@@ -232,6 +232,8 @@ mean_feature_importance_all_permute_smiles_test=np.mean(permute_importance_all_w
 sorted_feature_imporatnce_idx_permute_smiles_test=np.argsort(mean_feature_importance_all_permute_smiles_test[:-2])[::-1]
 top_10_permute=sorted_feature_imporatnce_idx_permute_smiles_test[:10]
 print('The top 10 most important substructure id from permutation importance is',top_10_permute)
+last_10_permute = sorted_feature_imporatnce_idx_permute_smiles_test[-10:]
+print('The last 10 most important substructure id from permutation importance is',last_10_permute)
 print("mean_feature_importance_all_permute_smiles_test is",mean_feature_importance_all_permute_smiles_test)
 '''
 #数据集包含成熟作物的MAE
@@ -255,6 +257,8 @@ for i in range(3):
     print("Use model to predict extra immature crop's TF error is", error_)
 print(pred_data,immature_TF)
 '''
+
+
 ccmap = np.load('../data/chemical_group.npy')
 ccmap_shuffle_property = []
 for i in total_id:
