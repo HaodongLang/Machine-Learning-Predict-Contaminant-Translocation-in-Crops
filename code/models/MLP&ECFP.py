@@ -55,9 +55,9 @@ pesticide_data = pd.read_excel("../data/data_final.xlsx",sheet_name="pesticide")
 PPCPs_data = pd.read_excel("../data/data_final.xlsx",sheet_name="PPCPs")
 other_data = pd.read_excel("../data/data_final.xlsx",sheet_name="other")
 
-x_pesticide_data = pesticide_data.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]].to_numpy().reshape(-1,5)
-x_PPCPs_data=PPCPs_data.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]].to_numpy().reshape(-1,5)
-x_other_data=other_data.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]].to_numpy().reshape(-1,5)
+x_pesticide_data = pesticide_data.loc[:,["log RCF","flipid"]].to_numpy().reshape(-1,2)
+x_PPCPs_data=PPCPs_data.loc[:,["log RCF","flipid"]].to_numpy().reshape(-1,2)
+x_other_data=other_data.loc[:,["log RCF","flipid"]].to_numpy().reshape(-1,2)
 
 SMILES_pesticide=pesticide_data.loc[:,"SMILES"]
 SMILES_PPCPs=PPCPs_data.loc[:,"SMILES"]
@@ -313,3 +313,4 @@ frame.set_linewidth(2)  # 设置边框宽度为2.0
 #     break
 print("r2={}".format(round(np.mean(test_score_all),2)))
 plt.show()
+
