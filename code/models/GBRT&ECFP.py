@@ -58,10 +58,10 @@ for SMILE in α_HBCD.loc[:,"SMILES"]:
     fp=AllChem.GetMorganFingerprintAsBitVect(mol,2,nBits=1024,bitInfo=info)
     FP.append(fp)
 FP = np.array(FP)
-α_HBCD = α_HBCD.loc[:,["log RCF","MW（g/mol）","logKow","flipid","TPSA","HBD","HBA"]]
+α_HBCD = α_HBCD.loc[:,["log RCF","MW（g/mol）","logKow","flipid"]]
 b_HBCD = other_data[name_condition_b]
 
-ECFP_α_HBCD = np.concatenate((α_HBCD.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]],FP),1)
+ECFP_α_HBCD = np.concatenate((α_HBCD.loc[:,["log RCF","flipid"]],FP),1)
 FP=[]
 for SMILE in b_HBCD.loc[:,"SMILES"]:
     info = {}
@@ -69,8 +69,8 @@ for SMILE in b_HBCD.loc[:,"SMILES"]:
     fp=AllChem.GetMorganFingerprintAsBitVect(mol,2,nBits=1024,bitInfo=info)
     FP.append(fp)
 FP = np.array(FP)
-b_HBCD = b_HBCD.loc[:,["log RCF","MW（g/mol）","logKow","flipid","TPSA","HBD","HBA"]]
-ECFP_b_HBCD = np.concatenate((b_HBCD.loc[:,["log RCF","flipid","TPSA","HBD","HBA"]],FP),1)
+b_HBCD = b_HBCD.loc[:,["log RCF","MW（g/mol）","logKow","flipid"]]
+ECFP_b_HBCD = np.concatenate((b_HBCD.loc[:,["log RCF","flipid"]],FP),1)
 
 flipid_pesticide=pesticide_data.loc[:,"flipid"].to_numpy().reshape(-1,1)
 flipid_PPCPs=PPCPs_data.loc[:,"flipid"].to_numpy().reshape(-1,1)
@@ -81,7 +81,7 @@ log_RCF_pesticide=pesticide_data.loc[:,"log RCF"].to_numpy().reshape(-1,1)
 log_RCF_PPCPs=PPCPs_data.loc[:,"log RCF"].to_numpy().reshape(-1,1)
 log_RCF_other=other_data.loc[:,"log RCF"].to_numpy().reshape(-1,1)
 log_RCF=np.concatenate((log_RCF_pesticide,log_RCF_PPCPs,log_RCF_other),0)
-print(log_RCF)
+
 MW_pesticide=pesticide_data.loc[:,"MW（g/mol）"].to_numpy().reshape(-1,1)
 MW_PPCPs=PPCPs_data.loc[:,"MW（g/mol）"].to_numpy().reshape(-1,1)
 MW_other=other_data.loc[:,"MW（g/mol）"].to_numpy().reshape(-1,1)
@@ -91,21 +91,6 @@ logKow_pesticide=pesticide_data.loc[:,"logKow"].to_numpy().reshape(-1,1)
 logKow_PPCPs=PPCPs_data.loc[:,"logKow"].to_numpy().reshape(-1,1)
 logKow_other=other_data.loc[:,"logKow"].to_numpy().reshape(-1,1)
 logKow=np.concatenate((logKow_pesticide,logKow_PPCPs,logKow_other),0)
-
-TPSA_pesticide=pesticide_data.loc[:,"TPSA"].to_numpy().reshape(-1,1)
-TPSA_PPCPs=PPCPs_data.loc[:,"TPSA"].to_numpy().reshape(-1,1)
-TPSA_other=other_data.loc[:,"TPSA"].to_numpy().reshape(-1,1)
-TPSA=np.concatenate((TPSA_pesticide,TPSA_PPCPs,TPSA_other),0)
-
-HBD_pesticide=pesticide_data.loc[:,"HBD"].to_numpy().reshape(-1,1)
-HBD_PPCPs=PPCPs_data.loc[:,"HBD"].to_numpy().reshape(-1,1)
-HBD_other=other_data.loc[:,"HBD"].to_numpy().reshape(-1,1)
-HBD=np.concatenate((HBD_pesticide,HBD_PPCPs,HBD_other),0)
-
-HBA_pesticide=pesticide_data.loc[:,"HBA"].to_numpy().reshape(-1,1)
-HBA_PPCPs=PPCPs_data.loc[:,"HBA"].to_numpy().reshape(-1,1)
-HBA_other=other_data.loc[:,"HBA"].to_numpy().reshape(-1,1)
-HBA=np.concatenate((HBA_pesticide,HBA_PPCPs,HBA_other),0)
 
 SMILES_pesticide=pesticide_data.loc[:,"SMILES"]
 SMILES_PPCPs=PPCPs_data.loc[:,"SMILES"]
@@ -119,7 +104,7 @@ for SMILE in SMILES:
     FP.append(fp)
 FP=np.array(FP)
 # inputDataX_for_importance = FP
-inputDataX_scaler = np.concatenate((log_RCF,flipid,TPSA,HBD,HBA),1)
+inputDataX_scaler = np.concatenate((log_RCF,flipid),1)
 inputDataX_for_importance=np.concatenate((inputDataX_scaler,FP),1)
 # inputDataX_scaler=scipy.stats.mstats.zscore(inputDataX_for_importance)
 inputDataX_scaler = inputDataX_for_importance
@@ -403,3 +388,4 @@ ax0.legend(loc='lower right')
 '''
 
 plt.show()
+
